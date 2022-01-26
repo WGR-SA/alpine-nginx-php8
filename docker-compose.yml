@@ -1,61 +1,16 @@
 version: "3.3"
 
 services:
-  web8:
+  php8:
     # container_name: php8
     depends_on:
       - db
     volumes:
-      - "${ROOT8}:/var/www/ROOT"
       - ./home:/var/www/nobody
     build:
       context: .
-      dockerfile: Dockerfile--web8
+      dockerfile: Dockerfile
     ports:
-      - "8108:8080"
+      - "80:80"
     environment:
       HOME: /var/www/nobody
-  web7:
-    # container_name: php8
-    depends_on:
-      - db
-    volumes:
-      - "${ROOT7}:/var/www/ROOT"
-      - ./home:/var/www/nobody
-    build:
-      context: .
-      dockerfile: Dockerfile--web7
-    ports:
-      - "8107:8080"
-    environment:
-      HOME: /var/www/nobody
-  pma:
-    depends_on:
-      - db
-    image: phpmyadmin/phpmyadmin
-    ports:
-      - "8101:80"
-    environment:
-      PMA_HOST: db
-      PMA_USER: root
-      PMA_PASSWORD: root
-      MYSQL_ROOT_PASSWORD: root
-  db:
-    image: mysql:8
-    ports:
-      - "8102:3306"
-    command: --default-authentication-plugin=mysql_native_password
-    volumes:
-      - ./data:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      # MYSQL_DATABASE: app
-      #MYSQL_USER: app
-      #MYSQL_PASSWORD: app
-    cap_add:
-      - SYS_NICE # CAP_SYS_NICE
-  redis:
-    image: redis
-    restart: unless-stopped
-    ports:
-      - "8103:6379"
